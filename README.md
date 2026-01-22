@@ -1,4 +1,4 @@
-## React - Основы
+## React - Основы и In Depth
 
 [Задание](https://rainy-muse-98c.notion.site/React-ea16dfa53d7e48329e9bc0e91f72f213)
 
