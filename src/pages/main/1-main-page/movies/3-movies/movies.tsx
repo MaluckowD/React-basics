@@ -1,3 +1,14 @@
+import { getMovies } from "./get-movies";
+import { Movie } from "./movie";
+import { favorites } from './favorites';
+
 export const Movies = () => {
-  return <div className="flex space-x-5">Текст из компонента Movies</div>;
+  const movies = getMovies();
+  return <div className="flex space-x-5">
+    {movies.map( (item) => {
+      return (
+        <Movie key = {item.id} movie={item} isFavorite={favorites.has(item.id)} />
+      )
+    })}
+  </div>;
 };
