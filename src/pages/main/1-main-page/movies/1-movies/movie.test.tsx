@@ -26,7 +26,7 @@ describe('1.1 JSX', () => {
     ).toBeVisible();
   });
 
-  it.skip('1.1.2 JavaScript in JSX with Curly Braces', () => {
+  it('1.1.2 JavaScript in JSX with Curly Braces', () => {
     const movie = getMovieModule.getMovie();
 
     // функция возвращает правильный объект с данными
