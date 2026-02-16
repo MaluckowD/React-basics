@@ -37,7 +37,7 @@ const thirdMovie = {
 
 const movies = [firstMovie, secondMovie, thirdMovie];
 
-describe.skip('1.2 Components', () => {
+describe('1.2 Components', () => {
   // убедитесь, что задаёте атрибут key в цикле map. Иначе тут будет ошибка:
   // expected "getMovies" to be called 1 times, but got 2 times
   it('1.2.2 Rendering Lists', async () => {
