@@ -1,4 +1,4 @@
-import { getMovie } from "./get-movie";
+import { getMovie } from './get-movie';
 
 export const Movie = () => {
   const movie = getMovie();
@@ -12,9 +12,7 @@ export const Movie = () => {
         alt={`${movie.title} (${movie.year})`}
         style={{ width: '300px' }}
       ></img>
-      <div>
-        {movie.description}
-      </div>
+      <div>{movie.description}</div>
     </div>
   );
 };
