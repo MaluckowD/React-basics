@@ -4,7 +4,7 @@ import * as getMovieModule from './get-movie';
 import { Movie } from './movie';
 
 describe('1.1 JSX', () => {
-  it.skip('1.1.1 Writing Markup with JSX', () => {
+  it('1.1.1 Writing Markup with JSX', () => {
     render(<Movie />);
 
     // h4 для названия фильма
