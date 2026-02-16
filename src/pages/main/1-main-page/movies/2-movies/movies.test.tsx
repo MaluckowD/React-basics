@@ -37,7 +37,7 @@ const thirdMovie = {
 
 const movies = [firstMovie, secondMovie, thirdMovie];
 
-describe.skip('1.2 Components', () => {
+describe('1.2 Components', () => {
   it('1.2.1 Passing Props to a Component | Conditional Rendering', () => {
     const hasFavorite = vi.spyOn(favorites, 'has');
 
