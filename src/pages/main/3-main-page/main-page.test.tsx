@@ -6,7 +6,7 @@ import * as getMoviesModule from './get-movies';
 import { MainPage } from './main-page';
 import * as moviesModule from './movies/movies';
 
-describe.skip('1.5 Updating Arrays in State | Sharing State Between Components', () => {
+describe('1.5 Updating Arrays in State | Sharing State Between Components', () => {
   it('1.5 Updating Arrays in State | Sharing State Between Components', async () => {
     // Проверяем отображение кнопки, формы и отбивки после "добавления"
 
