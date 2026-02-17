@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 
 import { MainPage } from './main-page';
 
-describe.skip('1.3 Understanding Your UI as a Tree', () => {
+describe('1.3 Understanding Your UI as a Tree', () => {
   it('1.3 Understanding Your UI as a Tree', async () => {
     render(<MainPage />);
 
