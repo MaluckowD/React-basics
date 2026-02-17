@@ -1,7 +1,7 @@
-import { Movie } from './movie';
+import { getMovies } from '../get-movies';
 
 import { favorites } from './favorites';
-import { getMovies } from '../get-movies';
+import { Movie } from './movie';
 
 export const Movies = () => {
   const movies = getMovies();
