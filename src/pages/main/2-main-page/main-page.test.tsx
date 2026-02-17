@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 
 import { MainPage } from './main-page';
 
-describe.skip("1.4 Responding to Events | State. A Component's Memory", () => {
+describe("1.4 Responding to Events | State. A Component's Memory", () => {
   it("1.4 Responding to Events | State. A Component's Memory", async () => {
     // Проверяем отображение кнопки, формы и нотификации после добавления фильма
 
