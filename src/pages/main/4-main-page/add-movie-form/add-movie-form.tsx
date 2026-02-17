@@ -3,24 +3,23 @@ import { useState } from 'react';
 
 import { Button } from '@/components';
 
-import type { MovieType } from '../movies/types';
-
 import {
   DescriptionField,
   PosterUrlField,
   TitleField,
   YearField,
 } from './form-fields';
+import { useMoviesDispatch } from '../movies-context';
 
-export const AddMovieForm = (props: {
-  onSubmit: (movie: MovieType) => void;
-}) => {
+export const AddMovieForm = () => {
   const [showForm, setShowForm] = useState(false);
   const [notification, setNotification] = useState('');
   const [title, setTitle] = useState('');
   const [year, setYear] = useState('');
   const [posterUrl, setPosterUrl] = useState('');
   const [description, setDescription] = useState('');
+
+  const dispatch = useMoviesDispatch();
 
   const onSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
@@ -30,8 +29,12 @@ export const AddMovieForm = (props: {
       year: Number(year),
       posterUrl,
       description,
+      isFavorite: false
     };
-    props.onSubmit(newMovie);
+    dispatch({
+      type: "added",
+      value: newMovie
+    })
     setNotification(`Фильм "${title}" добавлен!`);
     setShowForm(false);
     setTitle('');

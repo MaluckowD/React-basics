@@ -1,8 +1,9 @@
+import { useMovies } from '../movies-context';
 import { favorites } from './favorites';
 import { Movie } from './movie';
-import type { MovieType } from './types';
 
-export const Movies = ({ movies }: { movies: MovieType[] }) => {
+export const Movies = () => {
+  const movies = useMovies();
   return (
     <div className="flex space-x-5">
       {movies.map((item) => {
@@ -10,7 +11,6 @@ export const Movies = ({ movies }: { movies: MovieType[] }) => {
           <Movie
             key={item.id}
             movie={item}
-            isFavorite={favorites.has(item.id)}
           />
         );
       })}

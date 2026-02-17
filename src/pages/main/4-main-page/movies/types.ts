@@ -4,5 +4,5 @@ export type MovieType = {
   year: number;
   posterUrl: string;
   description: string;
-  // isFavorite: boolean;
+  isFavorite: boolean;
 };

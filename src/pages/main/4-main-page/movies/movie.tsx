@@ -1,19 +1,28 @@
+import { Button } from '@/components';
 import type { MovieType } from './types';
+import { useMovies, useMoviesDispatch } from '../movies-context';
 
 type Props = {
   movie: MovieType;
-  isFavorite: boolean;
 };
 
-export const Movie = ({ movie, isFavorite }: Props) => {
+export const Movie = ({ movie}: Props) => {
+  const dispatch = useMoviesDispatch();
+  const favoriteToggle = () => {
+    dispatch({
+      type: "favoriteToggled",
+      value: movie.id
+    })
+  }
   return (
     <div className="max-w-72">
       <h4>
         {movie.title}
-        {isFavorite && '\u2B50'}
+        {movie.isFavorite && '\u2B50'}
       </h4>
       {movie.year}
       <img src={movie.posterUrl} alt={`${movie.title} (${movie.year})`}></img>
+      <Button onClick = {favoriteToggle} type = "button">{movie.isFavorite ? "Удалить из избранного" : " Добавить в избранное"}</Button>
       <div className="text-base">{movie.description}</div>
     </div>
   );
