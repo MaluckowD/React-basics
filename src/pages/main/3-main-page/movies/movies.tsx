@@ -1,8 +1,8 @@
 import { favorites } from './favorites';
 import { Movie } from './movie';
-import { MovieType } from './types';
+import type { MovieType } from './types';
 
-export const Movies = ({movies}: {movies: MovieType[]}) => {
+export const Movies = ({ movies }: { movies: MovieType[] }) => {
   return (
     <div className="flex space-x-5">
       {movies.map((item) => {
