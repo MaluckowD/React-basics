@@ -1,9 +1,12 @@
-import { ChangeEventHandler } from "react";
+import type { ChangeEventHandler } from 'react';
 
-export const DescriptionField = ({onChange, value}: 
-  {onChange: ChangeEventHandler<HTMLTextAreaElement>,
-    value: string
-  }) => {
+export const DescriptionField = ({
+  onChange,
+  value,
+}: {
+  onChange: ChangeEventHandler<HTMLTextAreaElement>;
+  value: string;
+}) => {
   return (
     <div className="mb-5">
       <label

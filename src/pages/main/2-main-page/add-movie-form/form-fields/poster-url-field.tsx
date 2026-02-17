@@ -1,9 +1,12 @@
-import { ChangeEventHandler } from "react";
+import type { ChangeEventHandler } from 'react';
 
-export const PosterUrlField = ({onChange, value}: 
-  {onChange: ChangeEventHandler<HTMLInputElement>,
-    value: string
-  }) => {
+export const PosterUrlField = ({
+  onChange,
+  value,
+}: {
+  onChange: ChangeEventHandler<HTMLInputElement>;
+  value: string;
+}) => {
   return (
     <div className="mb-5">
       <label

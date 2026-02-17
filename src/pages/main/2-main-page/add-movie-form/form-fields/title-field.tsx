@@ -1,8 +1,12 @@
-import { ChangeEventHandler } from "react";
+import type { ChangeEventHandler } from 'react';
 
-export const TitleField = ( {onChange, value}:{onChange: ChangeEventHandler<HTMLInputElement>,
-    value: string
-  }) => {
+export const TitleField = ({
+  onChange,
+  value,
+}: {
+  onChange: ChangeEventHandler<HTMLInputElement>;
+  value: string;
+}) => {
   return (
     <div className="mb-5">
       <label
