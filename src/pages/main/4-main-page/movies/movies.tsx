@@ -1,5 +1,5 @@
 import { useMovies } from '../movies-context';
-import { favorites } from './favorites';
+
 import { Movie } from './movie';
 
 export const Movies = () => {
@@ -7,12 +7,7 @@ export const Movies = () => {
   return (
     <div className="flex space-x-5">
       {movies.map((item) => {
-        return (
-          <Movie
-            key={item.id}
-            movie={item}
-          />
-        );
+        return <Movie key={item.id} movie={item} />;
       })}
     </div>
   );

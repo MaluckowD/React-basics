@@ -3,13 +3,14 @@ import { useState } from 'react';
 
 import { Button } from '@/components';
 
+import { useMoviesDispatch } from '../movies-context';
+
 import {
   DescriptionField,
   PosterUrlField,
   TitleField,
   YearField,
 } from './form-fields';
-import { useMoviesDispatch } from '../movies-context';
 
 export const AddMovieForm = () => {
   const [showForm, setShowForm] = useState(false);
@@ -29,12 +30,12 @@ export const AddMovieForm = () => {
       year: Number(year),
       posterUrl,
       description,
-      isFavorite: false
+      isFavorite: false,
     };
     dispatch({
-      type: "added",
-      value: newMovie
-    })
+      type: 'added',
+      value: newMovie,
+    });
     setNotification(`Фильм "${title}" добавлен!`);
     setShowForm(false);
     setTitle('');

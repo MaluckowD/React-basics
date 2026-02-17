@@ -1,12 +1,15 @@
-import { createContext, ReactNode, useContext, useReducer} from "react";
-import { MovieType } from "./movies/types";
-import { getMovies } from "./get-movies";
-import type { Dispatch } from 'react';
+import { createContext, useContext, useReducer } from 'react';
+import type { Dispatch, ReactNode } from 'react';
+
+import { getMovies } from './get-movies';
+import type { MovieType } from './movies/types';
 
 export const MoviesContext = createContext<MovieType[]>([]);
-export const MoviesDispatchContext = createContext<Dispatch<MoviesAction>>(() => {});
+export const MoviesDispatchContext = createContext<Dispatch<MoviesAction>>(
+  () => {},
+);
 
-export const MoviesProvider = ({children}: {children: ReactNode}) => {
+export const MoviesProvider = ({ children }: { children: ReactNode }) => {
   const [movies, dispatch] = useReducer(moviesReducer, getMovies());
   return (
     <MoviesContext.Provider value={movies}>
@@ -14,7 +17,7 @@ export const MoviesProvider = ({children}: {children: ReactNode}) => {
         {children}
       </MoviesDispatchContext.Provider>
     </MoviesContext.Provider>
-  )
+  );
 };
 
 export const useMovies = () => {
@@ -26,22 +29,20 @@ export const useMoviesDispatch = () => {
 };
 
 type MoviesAction =
-  | { type: "added"; value: MovieType }
-  | { type: "favoriteToggled"; value: number }
+  | { type: 'added'; value: MovieType }
+  | { type: 'favoriteToggled'; value: number };
 
 function moviesReducer(state: MovieType[], action: MoviesAction): MovieType[] {
-  console.log("ACTION:", action);
-
   switch (action.type) {
-    case "added":
+    case 'added':
       return [...state, action.value];
-    case "favoriteToggled":
+    case 'favoriteToggled':
       return state.map((movie) =>
         movie.id === action.value
           ? { ...movie, isFavorite: !movie.isFavorite }
-          : movie
+          : movie,
       );
     default:
-      throw new Error("Unknown action");
+      throw new Error('Unknown action');
   }
 }

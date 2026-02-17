@@ -6,8 +6,8 @@ export const MainPage = () => {
   return (
     <div>
       <MoviesProvider>
-        <AddMovieForm/>
-        <Movies/>
+        <AddMovieForm />
+        <Movies />
       </MoviesProvider>
     </div>
   );
