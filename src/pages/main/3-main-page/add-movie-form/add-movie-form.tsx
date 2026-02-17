@@ -9,8 +9,9 @@ import {
   TitleField,
   YearField,
 } from './form-fields';
+import { MovieType } from '../movies/types';
 
-export const AddMovieForm = () => {
+export const AddMovieForm = (props: {onSubmit: (movie: MovieType) => void}) => {
   const [showForm, setShowForm] = useState(false);
   const [notification, setNotification] = useState('');
   const [title, setTitle] = useState('');
@@ -20,8 +21,16 @@ export const AddMovieForm = () => {
 
   const onSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
+    const newMovie = {
+      id: Math.round(Math.random() * 10000000),
+      title,
+      year: Number(year),
+      posterUrl,
+      description
+    }
+    props.onSubmit(newMovie);
     setNotification(
-      `Добавляемый фильм - Название: "${title}", год: "${year}", постер URL: "${posterUrl}", описание: "${description}"`,
+      `Фильм "${title}" добавлен!`
     );
     setShowForm(false);
     setTitle('');
