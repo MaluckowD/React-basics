@@ -7,7 +7,7 @@ import { MainPage } from './main-page';
 import * as moviesModule from './movies/movies';
 import * as moviesContextModule from './movies-context';
 
-describe.skip('1.6 Scaling Up with Reducer and Context', () => {
+describe('1.6 Scaling Up with Reducer and Context', () => {
   it('1.6 Scaling Up with Reducer and Context', async () => {
     // Проверяем добавление нового фильма и работу тогла избранного
 
