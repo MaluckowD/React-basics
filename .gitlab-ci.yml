@@ -2,6 +2,7 @@ stages:
   - install
   - build
   - quality
+  - deploy
 
 variables:
   PNPM_STORE_PATH: .pnpm-store
@@ -66,3 +67,16 @@ types:
     - pnpm run types:check # Запуск проверки типов TypeScript
   dependencies:
     - install # Получаем артефакты с этапа install
+
+pages:
+  stage: deploy
+  script:
+    - mkdir public
+    - cp -r dist/* public/
+  dependencies:
+    - build
+  artifacts:
+    paths:
+      - public
+  only:
+    - homework
