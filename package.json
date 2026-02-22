@@ -5,7 +5,10 @@
     "workerDirectory": "public"
   },
   "lint-staged": {
-    "*": "prettier --ignore-unknown --write"
+    "*.{ts,tsx,js,jsx}": [
+      "pnpm lint:fix",
+      "pnpm prettier --write"
+    ]
   },
   "scripts": {
     "start": "vite",
