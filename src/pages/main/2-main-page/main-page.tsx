@@ -5,6 +5,7 @@ export const MainPage = () => {
   return (
     <div>
       <AddMovieForm />
+      {/* test       */}\
       <Movies />
     </div>
   );
