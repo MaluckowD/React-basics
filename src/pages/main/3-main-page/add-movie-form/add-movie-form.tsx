@@ -12,7 +12,9 @@ import {
   YearField,
 } from './form-fields';
 
-export const AddMovieForm = (props: {
+export const AddMovieForm = ({
+  onSubmit,
+}: {
   onSubmit: (movie: MovieType) => void;
 }) => {
   const [showForm, setShowForm] = useState(false);
@@ -22,7 +24,7 @@ export const AddMovieForm = (props: {
   const [posterUrl, setPosterUrl] = useState('');
   const [description, setDescription] = useState('');
 
-  const onSubmit: FormEventHandler<HTMLFormElement> = (e) => {
+  const onSubmitForm: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     const newMovie = {
       id: Math.round(Math.random() * 10000000),
@@ -31,7 +33,7 @@ export const AddMovieForm = (props: {
       posterUrl,
       description,
     };
-    props.onSubmit(newMovie);
+    onSubmit(newMovie);
     setNotification(`Фильм "${title}" добавлен!`);
     setShowForm(false);
     setTitle('');
@@ -52,7 +54,7 @@ export const AddMovieForm = (props: {
         <form
           aria-label="Форма добавления фильма"
           className="max-w-sm my-5"
-          onSubmit={(e) => onSubmit(e)}
+          onSubmit={(e) => onSubmitForm(e)}
         >
           <TitleField
             onChange={(e) => setTitle(e.target.value)}

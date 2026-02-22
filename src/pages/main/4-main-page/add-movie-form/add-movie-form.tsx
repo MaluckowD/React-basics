@@ -13,7 +13,7 @@ import {
 } from './form-fields';
 
 export const AddMovieForm = () => {
-  const [showForm, setShowForm] = useState(false);
+  const [isShowForm, setIsShowForm] = useState(false);
   const [notification, setNotification] = useState('');
   const [title, setTitle] = useState('');
   const [year, setYear] = useState('');
@@ -37,7 +37,7 @@ export const AddMovieForm = () => {
       value: newMovie,
     });
     setNotification(`Фильм "${title}" добавлен!`);
-    setShowForm(false);
+    setIsShowForm(false);
     setTitle('');
     setDescription('');
     setYear('');
@@ -47,12 +47,12 @@ export const AddMovieForm = () => {
 
   const onAddMovieClick = () => {
     setNotification('');
-    setShowForm(true);
+    setIsShowForm(true);
   };
 
   return (
     <div>
-      {showForm && (
+      {isShowForm && (
         <form
           aria-label="Форма добавления фильма"
           className="max-w-sm my-5"
@@ -75,7 +75,7 @@ export const AddMovieForm = () => {
         </form>
       )}
       <div className="flex my-5 gap-x-4">
-        {!showForm && (
+        {!isShowForm && (
           <Button type="button" onClick={onAddMovieClick}>
             Добавить фильм
           </Button>
