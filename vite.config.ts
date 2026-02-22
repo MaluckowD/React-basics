@@ -6,6 +6,7 @@ import EnvironmentPlugin from 'vite-plugin-environment';
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: '/react-basics/',
   build: {
     sourcemap: true,
   },
