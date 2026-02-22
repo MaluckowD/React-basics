@@ -71,7 +71,7 @@ types:
 pages:
   stage: deploy
   script:
-    - mkdir public
+    - mkdir -p public
     - cp -r dist/* public/
   dependencies:
     - build

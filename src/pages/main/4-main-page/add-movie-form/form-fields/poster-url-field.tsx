@@ -21,7 +21,7 @@ export const PosterUrlField = ({
         onChange={onChange}
         value={value}
         id="posterUrl"
-        type="text"
+        type="url"
         placeholder="Введите URL постера"
       />
     </div>

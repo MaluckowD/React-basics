@@ -21,7 +21,7 @@ export const YearField = ({
         onChange={onChange}
         value={value}
         id="year"
-        type="text"
+        type="number"
         placeholder="Введите год"
       />
     </div>
