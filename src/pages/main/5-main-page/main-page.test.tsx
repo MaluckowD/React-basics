@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 
 import { MainPage } from './main-page';
 
-describe.skip('2.1 Referencing Values with Refs | Manipulating the DOM with Refs | Effects', () => {
+describe('2.1 Referencing Values with Refs | Manipulating the DOM with Refs | Effects', () => {
   const title = 'Довод';
   const year = 2020;
   const posterUrl =
