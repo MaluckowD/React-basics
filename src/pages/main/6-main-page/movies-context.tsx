@@ -1,18 +1,39 @@
-import { createContext, useContext, useReducer } from 'react';
+import { createContext, useContext, useEffect } from 'react';
 import type { Dispatch, ReactNode } from 'react';
+import { useImmerReducer } from 'use-immer';
 
-import { getMovies } from './get-movies';
 import type { MovieType } from './movies/types';
+import { useData } from './use-data';
 
-export const MoviesContext = createContext<MovieType[]>([]);
+type MoviesState = {
+  moviesById: Record<number, MovieType>;
+  isLoading: boolean;
+};
+export const MoviesContext = createContext<MoviesState>({
+  moviesById: {},
+  isLoading: true,
+});
 export const MoviesDispatchContext = createContext<Dispatch<MoviesAction>>(
   () => {},
 );
 
 export const MoviesProvider = ({ children }: { children: ReactNode }) => {
-  const [movies, dispatch] = useReducer(moviesReducer, getMovies());
+  const { moviesData } = useData();
+  const [state, dispatch] = useImmerReducer(moviesReducer, {
+    moviesById: {},
+    isLoading: true,
+  });
+
+  useEffect(() => {
+    if (!moviesData) {
+      dispatch({ type: 'loadingStarted' });
+      return;
+    }
+
+    dispatch({ type: 'moviesLoaded', value: moviesData });
+  }, [moviesData, dispatch]);
   return (
-    <MoviesContext.Provider value={movies}>
+    <MoviesContext.Provider value={state}>
       <MoviesDispatchContext.Provider value={dispatch}>
         {children}
       </MoviesDispatchContext.Provider>
@@ -29,19 +50,36 @@ export const useMoviesDispatch = () => {
 };
 
 type MoviesAction =
+  | { type: 'loadingStarted' }
+  | { type: 'moviesLoaded'; value: MovieType[] }
   | { type: 'added'; value: MovieType }
   | { type: 'favoriteToggled'; value: number };
 
-function moviesReducer(state: MovieType[], action: MoviesAction): MovieType[] {
+function moviesReducer(draft: MoviesState, action: MoviesAction) {
   switch (action.type) {
+    case 'loadingStarted':
+      draft.isLoading = true;
+      break;
+
+    case 'moviesLoaded':
+      draft.isLoading = false;
+      draft.moviesById = {};
+      action.value.forEach((movie) => {
+        draft.moviesById[movie.id] = movie;
+      });
+      break;
+
     case 'added':
-      return [...state, action.value];
+      draft.moviesById[action.value.id] = action.value;
+      break;
+
     case 'favoriteToggled':
-      return state.map((movie) =>
-        movie.id === action.value
-          ? { ...movie, isFavorite: !movie.isFavorite }
-          : movie,
-      );
+      if (draft.moviesById[action.value]) {
+        draft.moviesById[action.value].isFavorite =
+          !draft.moviesById[action.value].isFavorite;
+      }
+      break;
+
     default:
       throw new Error('Unknown action');
   }

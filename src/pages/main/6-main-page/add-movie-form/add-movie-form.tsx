@@ -2,9 +2,9 @@ import type { FormEventHandler } from 'react';
 import { useEffect, useReducer, useRef } from 'react';
 import { createPortal } from 'react-dom';
 
-import { Button, Notification } from '@/components';
+import { Button, Loading, Notification } from '@/components';
 
-import { useMoviesDispatch } from '../movies-context';
+import { useMovies, useMoviesDispatch } from '../movies-context';
 
 import { addMovieFormReducer } from './add-movie-form-reducer';
 import {
@@ -15,6 +15,7 @@ import {
 } from './form-fields';
 
 export const AddMovieForm = () => {
+  const { isLoading } = useMovies();
   const [state, dispatchMovieForm] = useReducer(addMovieFormReducer, {
     isShowForm: false,
     notification: '',
@@ -73,6 +74,10 @@ export const AddMovieForm = () => {
 
   const onCancel = () => dispatchMovieForm({ type: 'CLOSE_FORM' });
   const onAddMovieClick = () => dispatchMovieForm({ type: 'OPEN_FORM' });
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <div>
