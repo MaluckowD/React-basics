@@ -135,7 +135,6 @@ export const AddMovieForm = () => {
             Добавить фильм
           </Button>
         )}
-        {/* <div className="text-base">{notification}</div> */}
       </div>
       {state.notification &&
         createPortal(
