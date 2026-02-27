@@ -72,26 +72,15 @@ pages:
   stage: deploy
   script:
     - mkdir -p public
-
-    - |
-      if [ "$CI_PIPELINE_SOURCE" = "merge_request_event" ]; then
-        echo "Deploying MR preview"
-        mkdir -p public/mr-$CI_MERGE_REQUEST_IID
-        cp -r dist/* public/mr-$CI_MERGE_REQUEST_IID/
-      else
-        echo "Deploying production"
-        cp -r dist/* public/
-      fi
-
+    - cp -r dist/* public/
   dependencies:
     - build
-
   artifacts:
     paths:
       - public
-
   rules:
-    - if: '$CI_COMMIT_BRANCH == "master"'
-    - if: '$CI_COMMIT_BRANCH == "main"'
-
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH == "homework"'
+    
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && 
+           $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME == "dev" && 
+           $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "homework"'
