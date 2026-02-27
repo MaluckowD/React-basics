@@ -3,3 +3,4 @@ export { ErrorBoundaryFallbackComponent } from './error-boundary';
 export { Layout } from './layout';
 export { Loading } from './loading';
 export { Notification } from './notification';
+export { NotificationPortal } from './notification-portal';

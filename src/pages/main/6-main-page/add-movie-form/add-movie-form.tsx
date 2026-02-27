@@ -1,8 +1,8 @@
 import type { FormEventHandler } from 'react';
 import { useEffect, useReducer, useRef } from 'react';
-import { createPortal } from 'react-dom';
 
-import { Button, Loading, Notification } from '@/components';
+import { Button, Loading, NotificationPortal } from '@/components';
+import { INITIAL_MOVIE_FORM_STATE } from '@/constants/initial-movie-form-state';
 
 import { useMovies, useMoviesDispatch } from '../movies-context';
 
@@ -16,14 +16,10 @@ import {
 
 export const AddMovieForm = () => {
   const { isLoading } = useMovies();
-  const [state, dispatchMovieForm] = useReducer(addMovieFormReducer, {
-    isShowForm: false,
-    notification: '',
-    title: '',
-    year: '',
-    posterUrl: '',
-    description: '',
-  });
+  const [state, formDispatch] = useReducer(
+    addMovieFormReducer,
+    INITIAL_MOVIE_FORM_STATE,
+  );
 
   useEffect(() => {
     if (state.isShowForm) {
@@ -33,7 +29,7 @@ export const AddMovieForm = () => {
 
   const titleFieldRef = useRef<HTMLInputElement>(null);
 
-  const dispatch = useMoviesDispatch();
+  const moviesDispatch = useMoviesDispatch();
 
   const onSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
@@ -45,11 +41,11 @@ export const AddMovieForm = () => {
       description: state.description,
       isFavorite: false,
     };
-    dispatch({
-      type: 'added',
+    moviesDispatch({
+      type: 'ADDED_MOVIE',
       value: newMovie,
     });
-    dispatchMovieForm({
+    formDispatch({
       type: 'SUBMIT_FORM',
       notification: `Фильм "${state.title}" добавлен!`,
     });
@@ -60,7 +56,7 @@ export const AddMovieForm = () => {
       return;
     }
     const id = setTimeout(() => {
-      dispatchMovieForm({
+      formDispatch({
         type: 'UPDATE_FIELD',
         value: '',
         field: 'notification',
@@ -72,8 +68,8 @@ export const AddMovieForm = () => {
     };
   }, [state.notification]);
 
-  const onCancel = () => dispatchMovieForm({ type: 'CLOSE_FORM' });
-  const onAddMovieClick = () => dispatchMovieForm({ type: 'OPEN_FORM' });
+  const onCancel = () => formDispatch({ type: 'CLOSE_FORM' });
+  const onAddMovieClick = () => formDispatch({ type: 'OPEN_FORM' });
 
   if (isLoading) {
     return <Loading />;
@@ -89,7 +85,7 @@ export const AddMovieForm = () => {
         >
           <TitleField
             onChange={(e) =>
-              dispatchMovieForm({
+              formDispatch({
                 type: 'UPDATE_FIELD',
                 value: e.target.value,
                 field: 'title',
@@ -100,7 +96,7 @@ export const AddMovieForm = () => {
           />
           <YearField
             onChange={(e) =>
-              dispatchMovieForm({
+              formDispatch({
                 type: 'UPDATE_FIELD',
                 value: e.target.value,
                 field: 'year',
@@ -110,7 +106,7 @@ export const AddMovieForm = () => {
           />
           <PosterUrlField
             onChange={(e) =>
-              dispatchMovieForm({
+              formDispatch({
                 type: 'UPDATE_FIELD',
                 value: e.target.value,
                 field: 'posterUrl',
@@ -120,7 +116,7 @@ export const AddMovieForm = () => {
           />
           <DescriptionField
             onChange={(e) =>
-              dispatchMovieForm({
+              formDispatch({
                 type: 'UPDATE_FIELD',
                 value: e.target.value,
                 field: 'description',
@@ -141,11 +137,9 @@ export const AddMovieForm = () => {
           </Button>
         )}
       </div>
-      {state.notification &&
-        createPortal(
-          <Notification>{state.notification}</Notification>,
-          document.body,
-        )}
+      {state.notification && (
+        <NotificationPortal children={state.notification} />
+      )}
     </div>
   );
 };

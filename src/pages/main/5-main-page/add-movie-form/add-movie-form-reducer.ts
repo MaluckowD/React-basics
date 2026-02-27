@@ -9,7 +9,7 @@ type addMoviesFormAction =
     }
   | { type: 'HIDE_NOTIFICATION' };
 
-type addMoviesFormState = {
+export type addMoviesFormState = {
   isShowForm: boolean;
   notification: string;
   title: string;

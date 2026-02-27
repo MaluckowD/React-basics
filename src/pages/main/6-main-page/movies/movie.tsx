@@ -12,7 +12,7 @@ export const Movie = ({ movie }: Props) => {
   const dispatch = useMoviesDispatch();
   const favoriteToggle = () => {
     dispatch({
-      type: 'favoriteToggled',
+      type: 'FAVORITE_TOGGLED',
       value: movie.id,
     });
   };

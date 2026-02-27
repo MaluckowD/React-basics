@@ -26,11 +26,11 @@ export const MoviesProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (!moviesData) {
-      dispatch({ type: 'loadingStarted' });
+      dispatch({ type: 'LOADING_STARTED' });
       return;
     }
 
-    dispatch({ type: 'moviesLoaded', value: moviesData });
+    dispatch({ type: 'MOVIES_LOADED', value: moviesData });
   }, [moviesData, dispatch]);
   return (
     <MoviesContext.Provider value={state}>
@@ -50,18 +50,18 @@ export const useMoviesDispatch = () => {
 };
 
 type MoviesAction =
-  | { type: 'loadingStarted' }
-  | { type: 'moviesLoaded'; value: MovieType[] }
-  | { type: 'added'; value: MovieType }
-  | { type: 'favoriteToggled'; value: number };
+  | { type: 'LOADING_STARTED' }
+  | { type: 'MOVIES_LOADED'; value: MovieType[] }
+  | { type: 'ADDED_MOVIE'; value: MovieType }
+  | { type: 'FAVORITE_TOGGLED'; value: number };
 
 function moviesReducer(draft: MoviesState, action: MoviesAction) {
   switch (action.type) {
-    case 'loadingStarted':
+    case 'LOADING_STARTED':
       draft.isLoading = true;
       break;
 
-    case 'moviesLoaded':
+    case 'MOVIES_LOADED':
       draft.isLoading = false;
       draft.moviesById = {};
       action.value.forEach((movie) => {
@@ -69,11 +69,11 @@ function moviesReducer(draft: MoviesState, action: MoviesAction) {
       });
       break;
 
-    case 'added':
+    case 'ADDED_MOVIE':
       draft.moviesById[action.value.id] = action.value;
       break;
 
-    case 'favoriteToggled':
+    case 'FAVORITE_TOGGLED':
       if (draft.moviesById[action.value]) {
         draft.moviesById[action.value].isFavorite =
           !draft.moviesById[action.value].isFavorite;

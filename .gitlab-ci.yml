@@ -70,25 +70,13 @@ types:
 
 pages:
   stage: deploy
-
-  needs:
-    - job: build
-      artifacts: true
-
   script:
-    - echo "Checking dist..."
-    - ls -la
-    - ls -la dist || echo "dist not found"
-
     - mkdir -p public
-    - cp -r dist/. public/
-
+    - cp -r dist/* public/
+  dependencies:
+    - build
   artifacts:
     paths:
       - public
-
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "homework"'
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && 
-           $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME == "dev" && 
-           $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "homework"'
+  only:
+    - homework

@@ -29,14 +29,14 @@ export const useMoviesDispatch = () => {
 };
 
 type MoviesAction =
-  | { type: 'added'; value: MovieType }
-  | { type: 'favoriteToggled'; value: number };
+  | { type: 'ADDED_MOVIE'; value: MovieType }
+  | { type: 'FAVORITE_TOGGLED'; value: number };
 
 function moviesReducer(state: MovieType[], action: MoviesAction): MovieType[] {
   switch (action.type) {
-    case 'added':
+    case 'ADDED_MOVIE':
       return [...state, action.value];
-    case 'favoriteToggled':
+    case 'FAVORITE_TOGGLED':
       return state.map((movie) =>
         movie.id === action.value
           ? { ...movie, isFavorite: !movie.isFavorite }
