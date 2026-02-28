@@ -33,12 +33,15 @@ install:
 build:
   stage: build
   script:
-    - pnpm run build # Выполнение команды сборки
+    - pnpm run build
   dependencies:
-    - install # Получаем артефакты с этапа install
+    - install
   artifacts:
     paths:
-      - dist/ # Указываем, какие файлы будут результатом сборки
+      - dist/
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "homework"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
 
 prettier:
   stage: quality
@@ -86,21 +89,16 @@ pages:
 
 pages_review:
   stage: deploy
+  needs:
+    - build
   script:
     - mkdir -p public
     - cp -r dist/* public/
-  dependencies:
-    - build
   artifacts:
     paths:
       - public
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-  environment:
-    name: review/$CI_COMMIT_REF_NAME
-    url: https://$CI_PROJECT_NAMESPACE.gitlab.io/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/public/index.html
-    on_stop: stop_review
-  allow_failure: false
 
 stop_review:
   stage: deploy
