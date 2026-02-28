@@ -6,10 +6,7 @@ import EnvironmentPlugin from 'vite-plugin-environment';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base:
-    process.env.NODE_ENV === 'production'
-      ? '/homework-forks/dmitriy.malyukov/react/'
-      : '/',
+  base: './',
   build: {
     sourcemap: true,
   },
