@@ -23,19 +23,23 @@ default:
 install:
   stage: install
   script:
-    - pnpm install # Установка зависимостей
+    - pnpm install
   artifacts:
     paths:
-      - node_modules/ # Сохраняем node_modules для последующих этапов
-      - pnpm-lock.yaml # Сохраняем lock-файл, чтобы избежать изменений
-      - .pnpm-store # Сохраняем глобальный store для повторного использования
+      - node_modules/
+      - pnpm-lock.yaml
+      - .pnpm-store
+  rules:
+    - if: '$CI_COMMIT_BRANCH'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
 
 build:
   stage: build
   script:
     - pnpm run build
-  dependencies:
-    - install
+  needs:
+    - job: install
+      artifacts: true
   artifacts:
     paths:
       - dist/
