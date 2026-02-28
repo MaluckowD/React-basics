@@ -33,12 +33,15 @@ install:
 build:
   stage: build
   script:
-    - pnpm run build # Выполнение команды сборки
+    - pnpm run build
   dependencies:
-    - install # Получаем артефакты с этапа install
+    - install
   artifacts:
     paths:
-      - dist/ # Указываем, какие файлы будут результатом сборки
+      - dist/
+  rules:
+    - if: '$CI_COMMIT_BRANCH'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
 
 prettier:
   stage: quality
@@ -73,18 +76,18 @@ pages:
   script:
     - mkdir -p public
     - cp -r dist/* public/
-  dependencies:
-    - build
+  needs:
+    - job: build
+      artifacts: true
   artifacts:
     paths:
       - public
   environment:
-    name: $CI_ENVIRONMENT_NAME
+    name: review/$CI_COMMIT_REF_SLUG
     url: https://$CI_PROJECT_NAMESPACE.gitlab.io/$CI_PROJECT_NAME/$CI_COMMIT_REF_SLUG
   rules:
     - if: '$CI_COMMIT_BRANCH == "master"'
-      variables:
-        CI_ENVIRONMENT_NAME: production
+      environment:
+        name: production
+
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      variables:
-        CI_ENVIRONMENT_NAME: review/$CI_COMMIT_REF_SLUG
