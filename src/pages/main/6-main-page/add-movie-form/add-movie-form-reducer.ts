@@ -21,47 +21,39 @@ type addMoviesFormState = {
 export const addMovieFormReducer = (
   state: addMoviesFormState,
   action: addMoviesFormAction,
-): addMoviesFormState => {
+) => {
   switch (action.type) {
     case 'SUBMIT_FORM': {
-      return {
-        isShowForm: false,
-        notification: action.notification,
-        title: '',
-        year: '',
-        posterUrl: '',
-        description: '',
-      };
+      state.isShowForm = false;
+      state.notification = action.notification;
+      state.title = '';
+      state.year = '';
+      state.posterUrl = '';
+      state.description = '';
+      break;
     }
     case 'UPDATE_FIELD': {
-      return {
-        ...state,
-        [action.field]: action.value,
-      };
+      state[action.field] = action.value;
+      break;
     }
+
     case 'HIDE_NOTIFICATION': {
-      return {
-        ...state,
-        notification: '',
-      };
+      state.notification = '';
+      break;
     }
 
     case 'OPEN_FORM': {
-      return {
-        ...state,
-        isShowForm: true,
-      };
+      state.isShowForm = true;
+      break;
     }
 
     case 'CLOSE_FORM': {
-      return {
-        ...state,
-        isShowForm: false,
-        title: '',
-        year: '',
-        posterUrl: '',
-        description: '',
-      };
+      state.isShowForm = false;
+      state.title = '';
+      state.description = '';
+      state.posterUrl = '';
+      state.year = '';
+      break;
     }
     default:
       return state;
