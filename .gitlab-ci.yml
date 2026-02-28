@@ -68,6 +68,7 @@ types:
   dependencies:
     - install # Получаем артефакты с этапа install
 
+# Деплой для основной ветки (домашнее задание)
 pages:
   stage: deploy
   script:
