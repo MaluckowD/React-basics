@@ -33,15 +33,12 @@ install:
 build:
   stage: build
   script:
-    - pnpm run build
+    - pnpm run build # Выполнение команды сборки
   dependencies:
-    - install
+    - install # Получаем артефакты с этапа install
   artifacts:
     paths:
-      - dist/
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "homework"'
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      - dist/ # Указываем, какие файлы будут результатом сборки
 
 prettier:
   stage: quality
@@ -81,32 +78,40 @@ pages:
   artifacts:
     paths:
       - public
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "homework"'
+  only:
+    - homework
   environment:
     name: production
-    url: https://$CI_PROJECT_NAMESPACE.gitlab.io/$CI_PROJECT_NAME/
+    url: $CI_PAGES_URL
 
-pages_review:
+review:
   stage: deploy
-  needs:
-    - build
   script:
     - mkdir -p public
     - cp -r dist/* public/
+  dependencies:
+    - build
   artifacts:
     paths:
       - public
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+  only:
+    - merge_requests
+  environment:
+    name: review/$CI_COMMIT_REF_SLUG
+    url: $CI_PAGES_URL
+    on_stop: stop_review
+    auto_stop_in: 1 week
 
 stop_review:
   stage: deploy
   script:
-    - echo "Stopping review app"
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      when: manual
+    - echo "Stopping review environment for $CI_COMMIT_REF_SLUG"
+  dependencies: []
+  only:
+    - merge_requests
   environment:
-    name: review/$CI_COMMIT_REF_NAME
+    name: review/$CI_COMMIT_REF_SLUG
     action: stop
+  variables:
+    GIT_STRATEGY: none
+  when: manual
