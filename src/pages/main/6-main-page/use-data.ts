@@ -1,23 +1,27 @@
 import { useEffect, useState } from 'react';
 
-export const useData = () => {
-  const [moviesData, setMoviesData] = useState(null);
+export const useData = <T>(url: string) => {
+  const [data, setData] = useState<T | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const response = await fetch(`/api/movies`);
+        setLoading(true);
+        const response = await fetch(url);
         const data = await response.json();
-        setMoviesData(data);
-      } catch (error) {
-        console.error(error);
+        setData(data);
+      } catch (e) {
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchMovies();
-  }, []);
+  }, [url]);
 
   return {
-    moviesData,
+    data,
+    loading,
   };
 };

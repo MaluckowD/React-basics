@@ -87,7 +87,7 @@ export const AddMovieForm = () => {
         <form
           aria-label="Форма добавления фильма"
           className="max-w-sm my-5"
-          onSubmit={(e) => onSubmit(e)}
+          onSubmit={onSubmit}
         >
           <TitleField
             onChange={handleFieldChange('title')}

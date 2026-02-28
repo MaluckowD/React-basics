@@ -7,33 +7,33 @@ import { useData } from './use-data';
 
 type MoviesState = {
   moviesById: Record<number, MovieType>;
-  isLoading: boolean;
 };
-export const MoviesContext = createContext<MoviesState>({
+
+type MoviesContextValue = {
+  moviesById: Record<number, MovieType>;
+  loading: boolean;
+};
+
+export const MoviesContext = createContext<MoviesContextValue>({
   moviesById: {},
-  isLoading: true,
+  loading: true,
 });
+
 export const MoviesDispatchContext = createContext<Dispatch<MoviesAction>>(
   () => {},
 );
 
 export const MoviesProvider = ({ children }: { children: ReactNode }) => {
-  const { moviesData } = useData();
-  const [state, dispatch] = useImmerReducer(moviesReducer, {
-    moviesById: {},
-    isLoading: true,
-  });
+  const { data, loading } = useData<MovieType[]>(`/api/movies`);
+  const [state, dispatch] = useImmerReducer(moviesReducer, { moviesById: {} });
 
   useEffect(() => {
-    if (!moviesData) {
-      dispatch({ type: 'LOADING_STARTED' });
-      return;
+    if (data) {
+      dispatch({ type: 'SET_MOVIES', value: data });
     }
-
-    dispatch({ type: 'MOVIES_LOADED', value: moviesData });
-  }, [moviesData, dispatch]);
+  }, [data, dispatch]);
   return (
-    <MoviesContext.Provider value={state}>
+    <MoviesContext.Provider value={{ ...state, loading }}>
       <MoviesDispatchContext.Provider value={dispatch}>
         {children}
       </MoviesDispatchContext.Provider>
@@ -50,33 +50,27 @@ export const useMoviesDispatch = () => {
 };
 
 type MoviesAction =
-  | { type: 'LOADING_STARTED' }
-  | { type: 'MOVIES_LOADED'; value: MovieType[] }
+  | { type: 'SET_MOVIES'; value: MovieType[] }
   | { type: 'ADDED_MOVIE'; value: MovieType }
   | { type: 'FAVORITE_TOGGLED'; value: number };
 
-function moviesReducer(draft: MoviesState, action: MoviesAction) {
+function moviesReducer(state: MoviesState, action: MoviesAction) {
   switch (action.type) {
-    case 'LOADING_STARTED':
-      draft.isLoading = true;
-      break;
-
-    case 'MOVIES_LOADED':
-      draft.isLoading = false;
-      draft.moviesById = {};
+    case 'SET_MOVIES':
+      state.moviesById = {};
       action.value.forEach((movie) => {
-        draft.moviesById[movie.id] = movie;
+        state.moviesById[movie.id] = movie;
       });
       break;
 
     case 'ADDED_MOVIE':
-      draft.moviesById[action.value.id] = action.value;
+      state.moviesById[action.value.id] = action.value;
       break;
 
     case 'FAVORITE_TOGGLED':
-      if (draft.moviesById[action.value]) {
-        draft.moviesById[action.value].isFavorite =
-          !draft.moviesById[action.value].isFavorite;
+      if (state.moviesById[action.value]) {
+        state.moviesById[action.value].isFavorite =
+          !state.moviesById[action.value].isFavorite;
       }
       break;
 

@@ -1,9 +1,11 @@
 import type { FormEventHandler } from 'react';
-import { useEffect, useReducer, useRef } from 'react';
+import { useEffect, useRef } from 'react';
+import { useImmerReducer } from 'use-immer';
 
-import { Button, Loading, NotificationPortal } from '@/components';
+import { Button, NotificationPortal } from '@/components';
 import { INITIAL_MOVIE_FORM_STATE } from '@/constants/initial-movie-form-state';
 
+import type { addMoviesFormState } from '../../5-main-page/add-movie-form/add-movie-form-reducer';
 import { useMovies, useMoviesDispatch } from '../movies-context';
 
 import { addMovieFormReducer } from './add-movie-form-reducer';
@@ -15,30 +17,40 @@ import {
 } from './form-fields';
 
 export const AddMovieForm = () => {
-  const { isLoading } = useMovies();
-  const [state, formDispatch] = useReducer(
-    addMovieFormReducer,
-    INITIAL_MOVIE_FORM_STATE,
-  );
+  const { loading } = useMovies();
+  const [
+    { isShowForm, notification, year, title, posterUrl, description },
+    formDispatch,
+  ] = useImmerReducer(addMovieFormReducer, INITIAL_MOVIE_FORM_STATE);
 
   useEffect(() => {
-    if (state.isShowForm) {
+    if (isShowForm) {
       titleFieldRef.current?.focus();
     }
-  }, [state.isShowForm]);
+  }, [isShowForm]);
 
   const titleFieldRef = useRef<HTMLInputElement>(null);
 
   const moviesDispatch = useMoviesDispatch();
 
+  const handleFieldChange =
+    (field: keyof Omit<addMoviesFormState, 'isShowForm'>) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      formDispatch({
+        type: 'UPDATE_FIELD',
+        field,
+        value: e.target.value,
+      });
+    };
+
   const onSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     const newMovie = {
       id: Math.round(Math.random() * 10000000),
-      title: state.title,
-      year: Number(state.year),
-      posterUrl: state.posterUrl,
-      description: state.description,
+      title,
+      year: Number(year),
+      posterUrl,
+      description,
       isFavorite: false,
     };
     moviesDispatch({
@@ -47,12 +59,12 @@ export const AddMovieForm = () => {
     });
     formDispatch({
       type: 'SUBMIT_FORM',
-      notification: `Фильм "${state.title}" добавлен!`,
+      notification: `Фильм "${title}" добавлен!`,
     });
   };
 
   useEffect(() => {
-    if (!state.notification) {
+    if (!notification) {
       return;
     }
     const id = setTimeout(() => {
@@ -66,63 +78,32 @@ export const AddMovieForm = () => {
     return () => {
       clearTimeout(id);
     };
-  }, [state.notification]);
+  }, [notification]);
 
   const onCancel = () => formDispatch({ type: 'CLOSE_FORM' });
   const onAddMovieClick = () => formDispatch({ type: 'OPEN_FORM' });
 
-  if (isLoading) {
-    return <Loading />;
-  }
-
   return (
     <div>
-      {state.isShowForm && (
+      {isShowForm && (
         <form
           aria-label="Форма добавления фильма"
           className="max-w-sm my-5"
-          onSubmit={(e) => onSubmit(e)}
+          onSubmit={onSubmit}
         >
           <TitleField
-            onChange={(e) =>
-              formDispatch({
-                type: 'UPDATE_FIELD',
-                value: e.target.value,
-                field: 'title',
-              })
-            }
-            value={state.title}
+            onChange={handleFieldChange('title')}
+            value={title}
             ref={titleFieldRef}
           />
-          <YearField
-            onChange={(e) =>
-              formDispatch({
-                type: 'UPDATE_FIELD',
-                value: e.target.value,
-                field: 'year',
-              })
-            }
-            value={state.year}
-          />
+          <YearField onChange={handleFieldChange('year')} value={year} />
           <PosterUrlField
-            onChange={(e) =>
-              formDispatch({
-                type: 'UPDATE_FIELD',
-                value: e.target.value,
-                field: 'posterUrl',
-              })
-            }
-            value={state.posterUrl}
+            onChange={handleFieldChange('posterUrl')}
+            value={posterUrl}
           />
           <DescriptionField
-            onChange={(e) =>
-              formDispatch({
-                type: 'UPDATE_FIELD',
-                value: e.target.value,
-                field: 'description',
-              })
-            }
-            value={state.description}
+            onChange={handleFieldChange('description')}
+            value={description}
           />
           <div className="flex my-5 gap-x-4">
             <Button onClick={onCancel}>Отмена</Button>
@@ -131,15 +112,13 @@ export const AddMovieForm = () => {
         </form>
       )}
       <div className="flex my-5 gap-x-4">
-        {!state.isShowForm && (
+        {!isShowForm && !loading && (
           <Button type="button" onClick={onAddMovieClick}>
             Добавить фильм
           </Button>
         )}
       </div>
-      {state.notification && (
-        <NotificationPortal children={state.notification} />
-      )}
+      {notification && <NotificationPortal children={notification} />}
     </div>
   );
 };
