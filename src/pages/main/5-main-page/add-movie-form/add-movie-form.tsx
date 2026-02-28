@@ -6,7 +6,7 @@ import { INITIAL_MOVIE_FORM_STATE } from '@/constants/initial-movie-form-state';
 
 import { useMoviesDispatch } from '../movies-context';
 
-import type { addMoviesFormState } from './add-movie-form-reducer';
+import type { addMovieFormState } from './add-movie-form-reducer';
 import { addMovieFormReducer } from './add-movie-form-reducer';
 import {
   DescriptionField,
@@ -32,7 +32,7 @@ export const AddMovieForm = () => {
   const moviesDispatch = useMoviesDispatch();
 
   const handleFieldChange =
-    (field: keyof Omit<addMoviesFormState, 'isShowForm'>) =>
+    (field: keyof Omit<addMovieFormState, 'isShowForm'>) =>
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       formDispatch({
         type: 'UPDATE_FIELD',
@@ -116,7 +116,7 @@ export const AddMovieForm = () => {
           </Button>
         )}
       </div>
-      {notification && <NotificationPortal children={notification} />}
+      {notification && <NotificationPortal>{notification}</NotificationPortal>}
     </div>
   );
 };

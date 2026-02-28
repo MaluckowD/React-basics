@@ -5,7 +5,7 @@ import { useImmerReducer } from 'use-immer';
 import { Button, NotificationPortal } from '@/components';
 import { INITIAL_MOVIE_FORM_STATE } from '@/constants/initial-movie-form-state';
 
-import type { addMoviesFormState } from '../../5-main-page/add-movie-form/add-movie-form-reducer';
+import type { addMovieFormState } from '../../5-main-page/add-movie-form/add-movie-form-reducer';
 import { useMovies, useMoviesDispatch } from '../movies-context';
 
 import { addMovieFormReducer } from './add-movie-form-reducer';
@@ -34,7 +34,7 @@ export const AddMovieForm = () => {
   const moviesDispatch = useMoviesDispatch();
 
   const handleFieldChange =
-    (field: keyof Omit<addMoviesFormState, 'isShowForm'>) =>
+    (field: keyof Omit<addMovieFormState, 'isShowForm'>) =>
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       formDispatch({
         type: 'UPDATE_FIELD',
@@ -118,7 +118,7 @@ export const AddMovieForm = () => {
           </Button>
         )}
       </div>
-      {notification && <NotificationPortal children={notification} />}
+      {notification && <NotificationPortal>{notification}</NotificationPortal>}
     </div>
   );
 };

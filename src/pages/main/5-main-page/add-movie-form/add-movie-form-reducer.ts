@@ -5,11 +5,11 @@ type addMoviesFormAction =
   | {
       type: 'UPDATE_FIELD';
       value: string;
-      field: keyof Omit<addMoviesFormState, 'isShowForm'>;
+      field: keyof Omit<addMovieFormState, 'isShowForm'>;
     }
   | { type: 'HIDE_NOTIFICATION' };
 
-export type addMoviesFormState = {
+export type addMovieFormState = {
   isShowForm: boolean;
   notification: string;
   title: string;
@@ -19,9 +19,9 @@ export type addMoviesFormState = {
 };
 
 export const addMovieFormReducer = (
-  state: addMoviesFormState,
+  state: addMovieFormState,
   action: addMoviesFormAction,
-): addMoviesFormState => {
+): addMovieFormState => {
   switch (action.type) {
     case 'SUBMIT_FORM': {
       return {
