@@ -83,11 +83,13 @@ pages:
     paths:
       - public
   environment:
-    name: review/$CI_COMMIT_REF_SLUG
+    name: $CI_ENVIRONMENT_NAME
     url: https://$CI_PROJECT_NAMESPACE.gitlab.io/$CI_PROJECT_NAME/$CI_COMMIT_REF_SLUG
   rules:
     - if: '$CI_COMMIT_BRANCH == "master"'
-      environment:
-        name: production
+      variables:
+        CI_ENVIRONMENT_NAME: production
 
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      variables:
+        CI_ENVIRONMENT_NAME: review/$CI_COMMIT_REF_SLUG
