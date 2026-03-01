@@ -67,9 +67,7 @@ export const AddMovieForm = () => {
     }
     const id = setTimeout(() => {
       formDispatch({
-        type: 'UPDATE_FIELD',
-        value: '',
-        field: 'notification',
+        type: 'HIDE_NOTIFICATION',
       });
     }, 3000);
 
