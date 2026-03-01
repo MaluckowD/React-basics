@@ -23,22 +23,29 @@ default:
 install:
   stage: install
   script:
-    - pnpm install # Установка зависимостей
+    - pnpm install
   artifacts:
     paths:
-      - node_modules/ # Сохраняем node_modules для последующих этапов
-      - pnpm-lock.yaml # Сохраняем lock-файл, чтобы избежать изменений
-      - .pnpm-store # Сохраняем глобальный store для повторного использования
+      - node_modules/
+      - pnpm-lock.yaml
+      - .pnpm-store
+  rules:
+    - if: '$CI_COMMIT_BRANCH'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
 
 build:
   stage: build
   script:
-    - pnpm run build # Выполнение команды сборки
-  dependencies:
-    - install # Получаем артефакты с этапа install
+    - pnpm run build
+  needs:
+    - job: install
+      artifacts: true
   artifacts:
     paths:
-      - dist/ # Указываем, какие файлы будут результатом сборки
+      - dist/
+  rules:
+    - if: '$CI_COMMIT_BRANCH'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
 
 prettier:
   stage: quality
@@ -73,10 +80,20 @@ pages:
   script:
     - mkdir -p public
     - cp -r dist/* public/
-  dependencies:
-    - build
+  needs:
+    - job: build
+      artifacts: true
   artifacts:
     paths:
       - public
-  only:
-    - homework
+  environment:
+    name: $CI_ENVIRONMENT_NAME
+    url: https://$CI_PROJECT_NAMESPACE.gitlab.io/$CI_PROJECT_NAME/$CI_COMMIT_REF_SLUG
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master"'
+      variables:
+        CI_ENVIRONMENT_NAME: production
+
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      variables:
+        CI_ENVIRONMENT_NAME: review/$CI_COMMIT_REF_SLUG

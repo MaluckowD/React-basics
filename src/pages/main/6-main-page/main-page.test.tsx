@@ -2,7 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 
 import { MainPage } from './main-page';
 
-describe.skip('2.2 Reusing Logic with Custom Hooks', () => {
+describe('2.2 Reusing Logic with Custom Hooks', () => {
   it('2.2 Reusing Logic with Custom Hooks', async () => {
     // Так как в хуке useData будет использоваться обычный fetch, повешаем на него шпиона
     const fetchSpy = vi.spyOn(globalThis, 'fetch');
